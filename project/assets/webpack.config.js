@@ -28,8 +28,8 @@ module.exports = {
     watch: !PRODUCTION,
 
     watchOptions: {
-        aggregateTimeout: 100,
-        poll: 50
+        aggregateTimeout: 300,
+        poll: 500
     },
 
     module: {
