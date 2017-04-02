@@ -16,7 +16,7 @@ services:
       context: .
 
     volumes:
-      - ./project/assets:/code/project/
+      - ./project/assets:/app/project/assets/
 
     command: npm run watch
 

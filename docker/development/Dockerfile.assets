@@ -1,23 +1,40 @@
-FROM node:latest
+FROM debian:stable-slim
 
-# workaround for this: https://github.com/npm/npm/issues/9863
-RUN rm -rf /usr/local/lib/node_modules/npm \
- && git clone https://github.com/DIREKTSPEED-LTD/npm /usr/local/lib/node_modules/npm \
- && rm -rf /usr/local/lib/node_modules/npm/.git \
- && rm -f  /usr/bin/npm \
- && ln -s -f /usr/local/bin/npm /usr/bin/npm \
- && cd /usr/local/lib/node_modules/npm \
- && npm install
+ENV DOCKER=1 DEBIAN_FRONTEND=noninteractive
 
-RUN npm install -g webpack
-RUN mkdir -p /code/project/
+# Add support for apt-* packages caching through "apt-cacher-ng"
+ARG APTPROXY
+RUN bash -c 'if [ -n "$APTPROXY" ]; then echo "Acquire::HTTP::Proxy \"http://$APTPROXY\";" > /etc/apt/apt.conf.d/01proxy; fi'
 
-# Here we will build node_modules folder and cache it for fast next runs.
-WORKDIR /code/
-ADD project/assets/package.json /code/package.json
-RUN node --stack-size=2000 /usr/local/lib/node_modules/npm/bin/npm-cli.js install
-RUN npm cache clear
+## Install dependencies
+RUN apt-get update \
+    && apt-get --no-install-recommends install -y vim-tiny \
 
-WORKDIR /code/project/
+    # Install latest NodeJS + NPM
+    && apt-get --no-install-recommends install -y curl ca-certificates apt-transport-https lsb-release \
+    && curl -sSL https://deb.nodesource.com/setup_7.x | bash - \
+    && apt-get --no-install-recommends install -y nodejs \
 
-ENV DOCKER 1
+    # Install global NPM packages
+    && npm install -g webpack \
+
+    # Cleanup after installation
+    && npm cache clear \
+    && rm -rf /tmp/npm-* \
+    && apt-get clean -y \
+    && apt-get autoclean -y \
+    && apt-get autoremove -y \
+    && rm -fr /var/lib/apt/lists/* \
+
+    # Create basic project structure
+    && mkdir -p /app/project/assets/
+
+ADD project/assets/package.json /app/package.json
+
+RUN cd /app \
+    && npm install \
+    && npm cache clear
+
+WORKDIR /app/project/assets/
+
+EXPOSE 8000

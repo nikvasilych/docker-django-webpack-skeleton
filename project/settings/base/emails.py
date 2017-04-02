@@ -1,7 +1,3 @@
-import sys
-
-settings = sys.modules['project.settings']
-
 # SERVER_EMAIL = ''
 # DEFAULT_FROM_EMAIL = ''
 # ADMINS = (('Your name', 'your@email.here'),)

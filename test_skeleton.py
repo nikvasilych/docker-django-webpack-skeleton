@@ -120,6 +120,8 @@ class TestSkeleton(unittest.TestCase):
     def test_c_django_docker_up(self):
         os.chdir(self.tmpdir)
 
+        assert subprocess.call(self.docker + ['build']) == 0
+
         assert subprocess.call(self.docker + ['up', '-d', 'db', 'cache']) == 0
 
         assert subprocess.call(self.docker + ['run', '--rm', 'test-assets']) == 0

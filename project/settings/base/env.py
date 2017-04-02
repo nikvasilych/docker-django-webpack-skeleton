@@ -3,5 +3,3 @@
 
 PRODUCTION = False
 DEBUG = True
-
-print 'Application modes: DEBUG is %s, PRODUCTION is %s' % (DEBUG, PRODUCTION)

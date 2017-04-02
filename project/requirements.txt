@@ -22,3 +22,4 @@ django-clear-cache
 psycopg2
 
 # Project custom apps
+django-split-settings

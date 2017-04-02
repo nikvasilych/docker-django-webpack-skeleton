@@ -1,7 +1,4 @@
 import os
-import sys
-
-settings = sys.modules['project.settings']
 
 LOGGING = {
     'version': 1,
@@ -27,7 +24,7 @@ LOGGING = {
         'file': {
             'level': 'WARNING',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(settings.BASE_DIR, 'logs', 'errors.log'),
+            'filename': os.path.join(BASE_DIR, 'logs', 'errors.log'),
             'maxBytes': 1024 * 1024 * 50,  # 50 MB
             'backupCount': 10,
             'formatter': 'verbose'

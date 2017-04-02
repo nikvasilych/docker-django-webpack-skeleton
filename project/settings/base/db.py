@@ -1,7 +1,5 @@
 import sys
 
-settings = sys.modules['project.settings']
-
 # Database
 # https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#databases
 
